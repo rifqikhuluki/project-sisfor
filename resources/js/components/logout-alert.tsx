@@ -14,7 +14,7 @@ import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 const LogoutAlert = ({ onOpenChange, ...props }: AlertDialogProps) => {
     const handleLogout = () => {
         if (onOpenChange) onOpenChange(false);
-        router.get('/login');
+        router.post('/logout');
     };
     return (
         <AlertDialog onOpenChange={onOpenChange} {...props}>

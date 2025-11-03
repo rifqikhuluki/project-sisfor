@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -43,7 +44,16 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user(),
+                // 'user' => $request->user(),
+                'user' => fn () => auth('web')->check()
+                    ? [
+                        'id'     => auth('web')->id(),
+                        'name'   => auth('web')->user()->name,
+                        'email'  => auth('web')->user()->email,
+                        'avatar' => auth('web')->user()->avatar ?? null,
+                    ]
+                    : null,
+                'permissions' => $request->user()? $request->user()->getAllPermissions()->pluck('name'): []
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

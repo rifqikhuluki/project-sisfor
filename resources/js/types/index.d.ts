@@ -20,6 +20,7 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    permission: string;
 }
 
 export interface SharedData {
@@ -34,8 +35,8 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    avatar: string;
-    email_verified_at?: string;
+    avatar?: string | null;
+    // email_verified_at?: string;
     // two_factor_enabled?: boolean | nul;
     // created_at: string | null;
     // updated_at: string | null;
@@ -46,7 +47,7 @@ export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
-        user: User;
+        user: User | null;
     };
-    menu: Menu[];
+    name: string;
 };

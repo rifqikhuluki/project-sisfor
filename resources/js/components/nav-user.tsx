@@ -21,14 +21,26 @@ import { useState } from 'react';
 import LogoutAlert from './logout-alert';
 
 type Props = {
-    user: User;
+    user: User | null;
     btnClassName?: string;
     isNavbar?: boolean;
 };
 
+function initials(name?: string) {
+    if (!name) return 'GU';
+    const parts = name.trim().split(' ');
+    const first = parts[0]?.[0] ?? '';
+    const last = parts[1]?.[0] ?? '';
+    return (first + last || first).toUpperCase();
+}
+
 export function NavUser({ user, isNavbar, btnClassName }: Props) {
     const { isMobile } = useSidebar();
     const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+
+    const displayName = user?.name ?? 'Guest';
+    const displayEmail = user?.email ?? '—';
+    const avatar = user?.avatar ?? '/avatars/default.png';
 
     return (
         <SidebarMenu>
@@ -43,20 +55,17 @@ export function NavUser({ user, isNavbar, btnClassName }: Props) {
                             )}
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage
-                                    src={user.avatar}
-                                    alt={user.name}
-                                />
+                                <AvatarImage src={avatar} alt={displayName} />
                                 <AvatarFallback className="rounded-lg">
-                                    CN
+                                    {initials(displayName)}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate font-medium">
-                                    {user.name}
+                                    {displayName}
                                 </span>
                                 <span className="truncate text-xs">
-                                    {user.email}
+                                    {displayEmail}
                                 </span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
@@ -74,19 +83,19 @@ export function NavUser({ user, isNavbar, btnClassName }: Props) {
                                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                         <Avatar className="h-8 w-8 rounded-lg">
                                             <AvatarImage
-                                                src={user.avatar}
-                                                alt={user.name}
+                                                src={avatar}
+                                                alt={displayName}
                                             />
                                             <AvatarFallback className="rounded-lg">
-                                                CN
+                                                {initials(displayName)}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="grid flex-1 text-left text-sm leading-tight">
                                             <span className="truncate font-medium">
-                                                {user.name}
+                                                {displayName}
                                             </span>
                                             <span className="truncate text-xs">
-                                                {user.email}
+                                                {displayEmail}
                                             </span>
                                         </div>
                                     </div>
