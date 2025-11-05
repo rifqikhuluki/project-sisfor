@@ -20,4 +20,17 @@ class Menu extends Model
         'is_active',
         'image'
     ];
+
+    protected $casts = [
+        'harga' => 'decimal:2',
+        'is_active' => 'boolean',
+    ];
+
+    public function scopeActive($query){
+        return $query->where('is_active', true);
+    }
+
+    public function scopeByKategori($query, $kategori){
+        return $query->where('kategori', $kategori);
+    }
 }

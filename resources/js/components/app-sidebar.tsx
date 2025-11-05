@@ -31,7 +31,7 @@ const data = {
             items: [
                 {
                     title: 'Kasir',
-                    url: '#',
+                    url: '/kasir',
                 },
                 {
                     title: 'List Pesanan',
