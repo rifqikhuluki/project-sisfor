@@ -22,7 +22,7 @@ const data = {
             title: 'Dashboard',
             url: '/',
             icon: HomeIcon,
-            permission: 'dashboard.view',
+           // permission: 'dashboard.view',
         },
         {
             title: 'Kelola Pesanan',
@@ -43,7 +43,7 @@ const data = {
             title: 'Kelola Menu',
             url: '/menu',
             icon: BookOpen,
-            permission: 'menu.view',
+           // permission: 'menu.view',
         },
         {
             title: 'Kelola Stok',
@@ -58,17 +58,17 @@ const data = {
                 {
                     title: 'Pengguna',
                     url: '/user',
-                    permission: 'user.view',
+             //       permission: 'user.view',
                 },
                 {
                     title: 'Roles',
                     url: '/roles',
-                    permission: 'roles.view',
+             //       permission: 'roles.view',
                 },
                 {
                     title: 'Permission',
                     url: '/permission',
-                    permission: 'permission.view',
+             //       permission: 'permission.view',
                 },
             ],
         },
@@ -79,11 +79,11 @@ const data = {
             items: [
                 {
                     title: 'Laporan Pemasukkan',
-                    url: '#',
+                    url: '/laporan/pemasukan',
                 },
                 {
-                    title: 'Laporan Keuangan',
-                    url: '#',
+                    title: 'Laporan Pengeluaran',
+                    url: '/laporan/pengeluaran',
                 },
                 {
                     title: 'Laporan Karyawan',

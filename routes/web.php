@@ -7,6 +7,9 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LaporanPengeluaranController;
+use App\Http\Controllers\LaporanPemasukanController;
+use App\Http\Controllers\LaporanKaryawanController;
 use App\Http\Middleware\Loggedin;
 use App\Http\Middleware\LoginCheck;
 
@@ -50,12 +53,46 @@ Route::middleware(['web', 'auth'])->group(function () {
     
     // Kirim invoice via WhatsApp
     Route::get('/kasir/transaksi/{id}/whatsapp', [KasirController::class, 'sendWhatsApp'])->name('kasir.whatsapp');
+
+    // ========================================
+    // LAPORAN ROUTES
+    // ========================================
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        
+        // Laporan Pengeluaran
+        Route::prefix('pengeluaran')->name('pengeluaran.')->group(function () {
+            Route::get('/', [LaporanPengeluaranController::class, 'index'])->name('index');
+            Route::get('/create', [LaporanPengeluaranController::class, 'create'])->name('create');
+            Route::post('/', [LaporanPengeluaranController::class, 'store'])->name('store');
+            Route::get('/{pengeluaran}/edit', [LaporanPengeluaranController::class, 'edit'])->name('edit');
+            Route::put('/{pengeluaran}', [LaporanPengeluaranController::class, 'update'])->name('update');
+            Route::delete('/{pengeluaran}', [LaporanPengeluaranController::class, 'destroy'])->name('destroy');
+            Route::get('/export', [LaporanPengeluaranController::class, 'export'])->name('export');
+        });
+
+        // Laporan Pemasukan
+        Route::prefix('pemasukan')->name('pemasukan.')->group(function () {
+            Route::get('/', [LaporanPemasukanController::class, 'index'])->name('index');
+            Route::get('/create', [LaporanPemasukanController::class, 'create'])->name('create');
+            Route::post('/', [LaporanPemasukanController::class, 'store'])->name('store');
+            Route::get('/{pemasukan}/edit', [LaporanPemasukanController::class, 'edit'])->name('edit');
+            Route::put('/{pemasukan}', [LaporanPemasukanController::class, 'update'])->name('update');
+            Route::delete('/{pemasukan}', [LaporanPemasukanController::class, 'destroy'])->name('destroy');
+            Route::get('/export', [LaporanPemasukanController::class, 'export'])->name('export');
+        });
+
+        // Laporan Karyawan
+        Route::prefix('karyawan')->name('karyawan.')->group(function () {
+            Route::get('/', [LaporanKaryawanController::class, 'index'])->name('index');
+            Route::get('/create', [LaporanKaryawanController::class, 'create'])->name('create');
+            Route::post('/', [LaporanKaryawanController::class, 'store'])->name('store');
+            Route::get('/{karyawan}/edit', [LaporanKaryawanController::class, 'edit'])->name('edit');
+            Route::put('/{karyawan}', [LaporanKaryawanController::class, 'update'])->name('update');
+            Route::delete('/{karyawan}', [LaporanKaryawanController::class, 'destroy'])->name('destroy');
+            Route::get('/export', [LaporanKaryawanController::class, 'export'])->name('export');
+        });
+    });
 });
-
-
-
-
-
 
 
 
