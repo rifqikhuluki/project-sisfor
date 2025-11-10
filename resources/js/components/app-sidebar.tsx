@@ -1,7 +1,7 @@
 'use client';
 
 import { usePage } from '@inertiajs/react';
-import { BookOpen, Bot, HomeIcon, Settings2 } from 'lucide-react';
+import { BookOpen, Bot, HomeIcon, Settings2, FileScan } from 'lucide-react';
 import * as React from 'react';
 
 import { NavMain } from '@/components/nav-main';
@@ -22,7 +22,7 @@ const data = {
             title: 'Dashboard',
             url: '/',
             icon: HomeIcon,
-            permission: 'dashboard.view',
+           // permission: 'dashboard.view',
         },
         {
             title: 'Kelola Pesanan',
@@ -43,7 +43,7 @@ const data = {
             title: 'Kelola Menu',
             url: '/menu',
             icon: BookOpen,
-            permission: 'menu.view',
+           // permission: 'menu.view',
         },
         {
             title: 'Kelola Stok',
@@ -58,17 +58,17 @@ const data = {
                 {
                     title: 'Pengguna',
                     url: '/user',
-                    permission: 'user.view',
+                   // permission: 'user.view',
                 },
                 {
                     title: 'Roles',
                     url: '/roles',
-                    permission: 'roles.view',
+                    //permission: 'roles.view',
                 },
                 {
                     title: 'Permission',
                     url: '/permission',
-                    permission: 'permission.view',
+                    //permission: 'permission.view',
                 },
             ],
         },
@@ -91,6 +91,14 @@ const data = {
                 },
             ],
         },
+
+         // permission: 'gemini.analyze',
+        {
+            title: 'Upload Nota (Gemini AI)', 
+            url: '/gemini/upload', 
+            icon: FileScan, 
+        },
+
     ],
 };
 

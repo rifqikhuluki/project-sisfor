@@ -32,6 +32,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::get('/kasir', [KasirController::class, 'index']);
+    Route::get('/gemini/upload', function () {
+        return Inertia::render('Gemini/UploadNota');
+    })->name('gemini.upload');
 
     // Halaman Kasir
     Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
@@ -52,11 +55,15 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/kasir/transaksi/{id}/whatsapp', [KasirController::class, 'sendWhatsApp'])->name('kasir.whatsapp');
 });
 
+use App\Http\Controllers\GeminiController;
+Route::post('/extract-receipt', [GeminiController::class, 'extractReceipt'])->name('extract.receipt');
+Route::get('/upload-nota', function () {
+});
 
+use App\Http\Controllers\NotaUploadController;
 
-
-
-
+Route::get('/gemini/upload', [NotaUploadController::class, 'index'])->name('gemini.upload');
+Route::post('/gemini/upload', [NotaUploadController::class, 'store'])->name('gemini.store');
 
 
 
