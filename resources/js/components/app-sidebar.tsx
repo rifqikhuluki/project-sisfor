@@ -15,6 +15,7 @@ import {
     SidebarRail,
 } from '@/components/ui/sidebar';
 import type { PageProps } from '@/types';
+import { it } from 'node:test';
 
 const data = {
     navMain: [
@@ -47,8 +48,18 @@ const data = {
         },
         {
             title: 'Kelola Stok',
-            url: '/stok',
+            url: '/',
             icon: Settings2,
+            items: [
+                {
+                    title: 'Lihat Stok',
+                    url: '/stok',
+                },
+                {
+                    title: 'Tambah stok',
+                    url: '/stok/create',
+                },
+            ],
         },
         {
             title: 'Kelola Pengguna',

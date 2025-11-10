@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stok;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Stok;
 
 class StokController extends Controller
 {
     public function index()
     {
-        $stoks = Stok::all();
+        $stoks = Stok::paginate(10);
         return Inertia::render('Stok/Index', [
-            'stoks' => $stoks
+            'stoks' => $stoks,
         ]);
     }
 
@@ -23,27 +23,46 @@ class StokController extends Controller
 
     public function store(Request $request)
     {
-        Stok::create($request->all());
-        return redirect()->route('stok.index');
+        $validated = $request->validate([
+            'nama_bahan' => 'required|string|max:255',
+            'satuan' => 'required|string|max:100',
+            'sisa_awal' => 'required|numeric',
+            'sisa_sekarang' => 'required|numeric',
+            'jumlah_keluar' => 'required|numeric',
+            'tanggal_masuk' => 'nullable|date',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        Stok::create($validated);
+        return redirect()->route('stok.index')->with('message', 'Stok berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    public function edit(Stok $stok)
     {
-        $stok = Stok::findOrFail($id);
-        return Inertia::render('Stok/Edit', ['stok' => $stok]);
+        return Inertia::render('Stok/Edit', [
+            'stok' => $stok,
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Stok $stok)
     {
-        $stok = Stok::findOrFail($id);
-        $stok->update($request->all());
-        return redirect()->route('stok.index');
+        $validated = $request->validate([
+            'nama_bahan' => 'required|string|max:255',
+            'satuan' => 'required|string|max:100',
+            'sisa_awal' => 'required|numeric',
+            'sisa_sekarang' => 'required|numeric',
+            'jumlah_keluar' => 'required|numeric',
+            'tanggal_masuk' => 'nullable|date',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $stok->update($validated);
+        return redirect()->route('stok.index')->with('message', 'Stok berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy(Stok $stok)
     {
-        $stok = Stok::findOrFail($id);
         $stok->delete();
-        return redirect()->route('stok.index');
+        return redirect()->route('stok.index')->with('message', 'Stok berhasil dihapus!');
     }
 }

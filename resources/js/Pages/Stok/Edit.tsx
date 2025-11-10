@@ -4,28 +4,11 @@ import Layout from '@/components/ui/layout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BreadcrumbItem } from '@/types';
-import { useForm } from '@inertiajs/react';
-import React from 'react';
+import { router } from '@inertiajs/react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
-// 🧭 Breadcrumb untuk tampilan navigasi
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Kelola Stok', href: '/stok' },
-  { title: 'Edit Stok', href: '/stok/edit' },
-];
-
-// ✅ Tipe aman untuk form stok
-interface StokForm {
-  nama_bahan: string;
-  satuan: string;
-  sisa_awal: number;
-  sisa_sekarang: number;
-  jumlah_keluar: number;
-  tanggal_masuk: string;
-  keterangan: string;
-}
-
-interface EditProps {
-  stok: {
+interface StokType {
     id: number;
     nama_bahan: string;
     satuan: string;
@@ -34,84 +17,112 @@ interface EditProps {
     jumlah_keluar: number;
     tanggal_masuk?: string;
     keterangan?: string;
-  };
 }
 
-const Edit: React.FC<EditProps> = ({ stok }) => {
-  // 💡 Tambahkan tipe <StokForm> agar TypeScript tidak bingung
-  const { data, setData, put, processing } = useForm<StokForm>({
-    nama_bahan: stok.nama_bahan ?? '',
-    satuan: stok.satuan ?? '',
-    sisa_awal: stok.sisa_awal ?? 0,
-    sisa_sekarang: stok.sisa_sekarang ?? 0,
-    jumlah_keluar: stok.jumlah_keluar ?? 0,
-    tanggal_masuk: stok.tanggal_masuk ?? '',
-    keterangan: stok.keterangan ?? '',
-  });
+interface EditProps {
+    stok: StokType;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    put(`/stok/${stok.id}`);
-  };
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Kelola Stok', href: '/stok' },
+    { title: 'Edit Stok', href: '/stok' },
+];
 
-  return (
-    <Layout breadcrumbs={breadcrumbs}>
-      <Card className="mx-auto max-w-2xl">
-        <CardContent className="p-6">
-          <h2 className="mb-4 text-xl font-semibold">Edit Stok</h2>
+export default function Edit({ stok }: EditProps) {
+    const [formData, setFormData] = useState({
+        nama_bahan: stok.nama_bahan || '',
+        satuan: stok.satuan || '',
+        sisa_awal: stok.sisa_awal || 0,
+        sisa_sekarang: stok.sisa_sekarang || 0,
+        jumlah_keluar: stok.jumlah_keluar || 0,
+        tanggal_masuk: stok.tanggal_masuk || '',
+        keterangan: stok.keterangan || '',
+    });
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label>Nama Bahan</Label>
-              <Input
-                value={data.nama_bahan}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData('nama_bahan', e.target.value)
-                }
-              />
+    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        router.put(`/stok/${stok.id}`, formData, {
+            onSuccess: () => toast.success('Stok berhasil diperbarui!'),
+        });
+    }
+
+    return (
+        <Layout breadcrumbs={breadcrumbs}>
+            <div className="flex flex-col gap-4 p-4">
+                <Card>
+                    <CardContent className="p-6">
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <Label>Nama Bahan</Label>
+                                <Input
+                                    name="nama_bahan"
+                                    value={formData.nama_bahan}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Satuan</Label>
+                                <Input
+                                    name="satuan"
+                                    value={formData.satuan}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Sisa Awal</Label>
+                                <Input
+                                    type="number"
+                                    name="sisa_awal"
+                                    value={formData.sisa_awal}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Sisa Sekarang</Label>
+                                <Input
+                                    type="number"
+                                    name="sisa_sekarang"
+                                    value={formData.sisa_sekarang}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Jumlah Keluar</Label>
+                                <Input
+                                    type="number"
+                                    name="jumlah_keluar"
+                                    value={formData.jumlah_keluar}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Tanggal Masuk</Label>
+                                <Input
+                                    type="date"
+                                    name="tanggal_masuk"
+                                    value={formData.tanggal_masuk}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label>Keterangan</Label>
+                                <Input
+                                    name="keterangan"
+                                    value={formData.keterangan}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <Button type="submit">Simpan Perubahan</Button>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
             </div>
-
-            <div>
-              <Label>Satuan</Label>
-              <Input
-                value={data.satuan}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData('satuan', e.target.value)
-                }
-              />
-            </div>
-
-            <div>
-              <Label>Sisa Sekarang</Label>
-              <Input
-                type="number"
-                value={data.sisa_sekarang}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData('sisa_sekarang', Number(e.target.value))
-                }
-              />
-            </div>
-
-            <div>
-              <Label>Keterangan</Label>
-              <Input
-                value={data.keterangan}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setData('keterangan', e.target.value)
-                }
-              />
-            </div>
-
-            <div className="flex justify-end gap-2">
-              <Button type="submit" disabled={processing}>
-                Simpan Perubahan
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </Layout>
-  );
-};
-
-export default Edit;
+        </Layout>
+    );
+}

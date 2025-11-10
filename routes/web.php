@@ -39,8 +39,14 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
 
     // Kelola Stok Barang
-    Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
-
+    Route::prefix('stok')->name('stok.')->group(function () {
+    Route::get('/', [StokController::class, 'index'])->name('index');
+    Route::get('/create', [StokController::class, 'create'])->name('create');
+    Route::post('/', [StokController::class, 'store'])->name('store');
+    Route::get('/{stok}/edit', [StokController::class, 'edit'])->name('edit');
+    Route::put('/{stok}', [StokController::class, 'update'])->name('update');
+    Route::delete('/{stok}', [StokController::class, 'destroy'])->name('destroy');
+    });
 
 
     // Proses transaksi (Bayar Sekarang & Bayar Nanti)
