@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Loggedin;
 use App\Http\Middleware\LoginCheck;
+use App\Http\Controllers\StokController;
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,23 +32,29 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permission', PermissionController::class);
+
     Route::get('/kasir', [KasirController::class, 'index']);
 
     // Halaman Kasir
     Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
-    
+
+    // Kelola Stok Barang
+    Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
+
+
+
     // Proses transaksi (Bayar Sekarang & Bayar Nanti)
     Route::post('/kasir/transaksi', [KasirController::class, 'store'])->name('kasir.store');
-    
+
     // Lihat detail transaksi
     Route::get('/kasir/transaksi/{id}', [KasirController::class, 'show'])->name('kasir.show');
-    
+
     // List Open Bills
     Route::get('/kasir/open-bills', [KasirController::class, 'getOpenBills'])->name('kasir.open-bills');
-    
+
     // Bayar Open Bill (cicilan/lunas)
     Route::post('/kasir/open-bill/{id}/pay', [KasirController::class, 'payOpenBill'])->name('kasir.pay-open-bill');
-    
+
     // Kirim invoice via WhatsApp
     Route::get('/kasir/transaksi/{id}/whatsapp', [KasirController::class, 'sendWhatsApp'])->name('kasir.whatsapp');
 });

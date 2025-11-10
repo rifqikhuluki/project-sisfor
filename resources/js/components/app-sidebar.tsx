@@ -47,7 +47,7 @@ const data = {
         },
         {
             title: 'Kelola Stok',
-            url: '#',
+            url: '/stok',
             icon: Settings2,
         },
         {
